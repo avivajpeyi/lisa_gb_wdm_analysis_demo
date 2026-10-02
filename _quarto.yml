@@ -1,0 +1,18 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "LISA Galactic Binary WDM Analysis Demo"
+  repo-url: "https://github.com/avivajpeyi/lisa_gb_wdm_analysis_demo"
+  repo-actions: [issue]
+  navbar:
+    right:
+      - icon: github
+        href: "https://github.com/avivajpeyi/lisa_gb_wdm_analysis_demo"
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-fold: show

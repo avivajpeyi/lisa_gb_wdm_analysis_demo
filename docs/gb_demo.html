@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>LISA galactic binary: Fourier and WDM – LISA Galactic Binary WDM Analysis Demo</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">LISA Galactic Binary WDM Analysis Demo</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/avivajpeyi/lisa_gb_wdm_analysis_demo"> <i class="bi bi-github" role="img">
+</i>
+<span class="menu-text"></span></a>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">1. Setup</a></li>
+  <li><a href="#source-and-settings" id="toc-source-and-settings" class="nav-link" data-scroll-target="#source-and-settings">2. Source and settings</a></li>
+  <li><a href="#simulate-ae" id="toc-simulate-ae" class="nav-link" data-scroll-target="#simulate-ae">3. Simulate A/E</a></li>
+  <li><a href="#taper-the-ends-and-gaps" id="toc-taper-the-ends-and-gaps" class="nav-link" data-scroll-target="#taper-the-ends-and-gaps">4. Taper the ends and gaps</a></li>
+  <li><a href="#signal-with-and-without-gaps" id="toc-signal-with-and-without-gaps" class="nav-link" data-scroll-target="#signal-with-and-without-gaps">5. Signal with and without gaps</a></li>
+  <li><a href="#wdm-in-a-frequency-band" id="toc-wdm-in-a-frequency-band" class="nav-link" data-scroll-target="#wdm-in-a-frequency-band">6. WDM in a frequency band</a></li>
+  <li><a href="#likelihoods" id="toc-likelihoods" class="nav-link" data-scroll-target="#likelihoods">7. Likelihoods</a></li>
+  <li><a href="#likelihood-runtime" id="toc-likelihood-runtime" class="nav-link" data-scroll-target="#likelihood-runtime">8. Likelihood runtime</a></li>
+  <li><a href="#fit-f_0-dot-f-a" id="toc-fit-f_0-dot-f-a" class="nav-link" data-scroll-target="#fit-f_0-dot-f-a">9. Fit <span class="math inline">\(f_0\)</span>, <span class="math inline">\(\dot f\)</span>, <span class="math inline">\(A\)</span></a></li>
+  <li><a href="#posteriors-and-checks" id="toc-posteriors-and-checks" class="nav-link" data-scroll-target="#posteriors-and-checks">10. Posteriors and checks</a></li>
+  <li><a href="#mcmc-runtime" id="toc-mcmc-runtime" class="nav-link" data-scroll-target="#mcmc-runtime">11. MCMC runtime</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/avivajpeyi/lisa_gb_wdm_analysis_demo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">LISA galactic binary: Fourier and WDM</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+
+
+
+  </div>
+
+
+
+</header>
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://colab.research.google.com/github/avivajpeyi/lisa_gb_wdm_analysis_demo/blob/main/gb_demo.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" class="img-fluid figure-img"></a></p>
+<figcaption>Open In Colab</figcaption>
+</figure>
+</div>
+<p>Run all in a Python ≥3.12 CPU runtime. Simulate one year of A/E data and fit <span class="math inline">\(f_0\)</span>, <span class="math inline">\(\dot f\)</span>, and <span class="math inline">\(A\)</span>, with and without gaps. Sky, orientation, and instrument noise are fixed.</p>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">1. Setup</h2>
+<div id="b74d30f7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:52:53.199952Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:52:53.199878Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:52:56.328250Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:52:56.327425Z&quot;}}" data-execution_count="1">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install <span class="op">-</span>q jaxgb<span class="op">==</span><span class="fl">0.2.1</span> lisaorbits<span class="op">==</span><span class="fl">3.1.0</span> lisaanalysistools<span class="op">==</span><span class="fl">1.2.8</span> <span class="op">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"wdm-transform[jax]==0.5.0"</span> emcee<span class="op">==</span><span class="fl">3.1.6</span> gpubackendtools<span class="op">==</span><span class="fl">0.1.1</span> <span class="op">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    astropy<span class="op">==</span><span class="fl">7.2.0</span> matplotlib</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="f5e406c3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:52:56.329999Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:52:56.329884Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:00.588392Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:00.587873Z&quot;}}" data-execution_count="2">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> platform</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> importlib.metadata <span class="im">import</span> version</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> time <span class="im">import</span> perf_counter</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> sys.version_info <span class="op">&gt;=</span> (<span class="dv">3</span>, <span class="dv">12</span>), <span class="st">"Use a Python 3.12+ runtime."</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>os.environ.setdefault(<span class="st">"OPENBLAS_NUM_THREADS"</span>, <span class="st">"4"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>os.environ.setdefault(<span class="st">"JAX_PLATFORMS"</span>, <span class="st">"cpu"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>jax.config.update(<span class="st">"jax_enable_x64"</span>, <span class="va">True</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Markdown, display</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.linalg <span class="im">import</span> eigh</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.signal <span class="im">import</span> hilbert</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> emcee</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> jaxgb.jaxgb <span class="im">import</span> JaxGB</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lisaorbits <span class="im">import</span> EqualArmlengthOrbits</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lisatools.sensitivity <span class="im">import</span> get_sensitivity, A2TDISens</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wdm_transform <span class="im">import</span> WDM, TimeSeries</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wdm_transform.transforms <span class="im">import</span> (</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    from_freq_to_wdm_band, from_wdm_to_freq_subband,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    fourier_span_from_wdm_span, wdm_span_from_fourier_span,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>plt.rcParams.update({<span class="st">"font.size"</span>: <span class="dv">11</span>, <span class="st">"figure.figsize"</span>: (<span class="dv">11</span>, <span class="fl">3.5</span>)})</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>BLUE, ORANGE, OLIVE <span class="op">=</span> <span class="st">"#2463a6"</span>, <span class="st">"#c46b27"</span>, <span class="st">"#628342"</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>packages <span class="op">=</span> [<span class="st">"jaxgb"</span>, <span class="st">"lisaorbits"</span>, <span class="st">"lisaanalysistools"</span>, <span class="st">"wdm-transform"</span>, <span class="st">"emcee"</span>, <span class="st">"jax"</span>, <span class="st">"numpy"</span>, <span class="st">"scipy"</span>, <span class="st">"gpubackendtools"</span>, <span class="st">"astropy"</span>]</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Python"</span>, sys.version.split()[<span class="dv">0</span>], <span class="st">"| JAX devices:"</span>, jax.devices())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Python 3.12.12 | JAX devices: [CpuDevice(id=0)]</code></pre>
+</div>
+</div>
+</section>
+<section id="source-and-settings" class="level2">
+<h2 class="anchored" data-anchor-id="source-and-settings">2. Source and settings</h2>
+<div id="95102047" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:00.589489Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:00.589407Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:00.884371Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:00.883917Z&quot;}}" data-execution_count="3">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>T <span class="op">=</span> <span class="fl">365.25</span> <span class="op">*</span> <span class="dv">86400</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>N, NT, NSLOW <span class="op">=</span> <span class="dv">2</span><span class="op">**</span><span class="dv">18</span>, <span class="dv">64</span>, <span class="dv">1024</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>DT, DAY <span class="op">=</span> T <span class="op">/</span> N, <span class="dv">86400</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>F0, FDOT, A0 <span class="op">=</span> <span class="fl">3e-3</span>, <span class="fl">1e-15</span>, <span class="fl">3.6448032791850685e-23</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>GAPS <span class="op">=</span> [(<span class="dv">60</span>, <span class="dv">67</span>), (<span class="dv">150</span>, <span class="dv">157</span>), (<span class="dv">240</span>, <span class="dv">247</span>)]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>TAPER_DAYS, GUARD_ROWS <span class="op">=</span> <span class="fl">2.</span>, <span class="dv">3</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>SEED <span class="op">=</span> <span class="dv">20261002</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> JaxGB(EqualArmlengthOrbits(), t_obs<span class="op">=</span>T, t0<span class="op">=</span><span class="dv">0</span>, n<span class="op">=</span>NSLOW)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">@jax.jit</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> binary(theta):</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># theta = [T * delta_f0, T**2 * delta_fdot, A / A0]</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    parameters <span class="op">=</span> jnp.array([F0 <span class="op">+</span> theta[<span class="dv">0</span>] <span class="op">/</span> T, FDOT <span class="op">+</span> theta[<span class="dv">1</span>] <span class="op">/</span> T<span class="op">**</span><span class="dv">2</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>                            A0 <span class="op">*</span> theta[<span class="dv">2</span>], <span class="fl">1.</span>, <span class="fl">.4</span>, <span class="fl">.3</span>, <span class="fl">.8</span>, <span class="fl">.2</span>])</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    a, e, _ <span class="op">=</span> response.get_tdi(parameters, tdi_generation<span class="op">=</span><span class="dv">2</span>, tdi_combination<span class="op">=</span><span class="st">"AET"</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jnp.stack([a, e]), response.get_kmin(parameters[<span class="dv">0</span>])</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>time <span class="op">=</span> np.arange(N) <span class="op">*</span> DT</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>frequency <span class="op">=</span> np.fft.rfftfreq(N, DT)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>psd <span class="op">=</span> get_sensitivity(np.maximum(frequency, frequency[<span class="dv">1</span>]),</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>                      sens_fn<span class="op">=</span>A2TDISens, model<span class="op">=</span><span class="st">"scirdv1"</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>injection <span class="op">=</span> np.array([<span class="fl">0.</span>, <span class="fl">0.</span>, <span class="fl">1.</span>])</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>h, first <span class="op">=</span> binary(injection)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>source_bins <span class="op">=</span> np.arange(<span class="bu">int</span>(first) <span class="op">-</span> <span class="dv">3</span>, <span class="bu">int</span>(first) <span class="op">+</span> NSLOW <span class="op">+</span> <span class="dv">3</span>)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>columns <span class="op">=</span> np.arange(<span class="bu">round</span>(F0 <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> T <span class="op">/</span> NT) <span class="op">-</span> <span class="dv">2</span>, <span class="bu">round</span>(F0 <span class="op">*</span> <span class="dv">2</span> <span class="op">*</span> T <span class="op">/</span> NT) <span class="op">+</span> <span class="dv">3</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"One year | f0 = </span><span class="sc">{</span>F0 <span class="op">*</span> <span class="fl">1e3</span><span class="sc">:g}</span><span class="ss"> mHz | fdot = </span><span class="sc">{</span>FDOT<span class="sc">:g}</span><span class="ss"> Hz/s | A = </span><span class="sc">{</span>A0<span class="sc">:.6g}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>One year | f0 = 3 mHz | fdot = 1e-15 Hz/s | A = 3.6448e-23</code></pre>
+</div>
+</div>
+</section>
+<section id="simulate-ae" class="level2">
+<h2 class="anchored" data-anchor-id="simulate-ae">3. Simulate A/E</h2>
+<div id="7cec8eb3" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:00.885518Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:00.885434Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:00.898996Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:00.898473Z&quot;}}" data-execution_count="4">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(SEED)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>spectrum <span class="op">=</span> np.zeros((<span class="dv">2</span>, <span class="bu">len</span>(frequency)), <span class="bu">complex</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>spectrum[:, <span class="bu">int</span>(first):<span class="bu">int</span>(first) <span class="op">+</span> NSLOW] <span class="op">=</span> np.asarray(h) <span class="op">/</span> DT</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>signal <span class="op">=</span> np.fft.irfft(spectrum, n<span class="op">=</span>N, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> np.sqrt(N <span class="op">*</span> psd <span class="op">/</span> (<span class="dv">4</span> <span class="op">*</span> DT)) <span class="op">*</span> (</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    rng.normal(size<span class="op">=</span>spectrum.shape) <span class="op">+</span> <span class="ot">1j</span> <span class="op">*</span> rng.normal(size<span class="op">=</span>spectrum.shape))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> [<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]:</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    noise[:, k] <span class="op">=</span> rng.normal(size<span class="op">=</span><span class="dv">2</span>) <span class="op">*</span> np.sqrt(N <span class="op">*</span> psd[k] <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> DT))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> signal <span class="op">+</span> np.fft.irfft(noise, n<span class="op">=</span>N, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>available <span class="op">=</span> np.ones(N, <span class="bu">bool</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, stop <span class="kw">in</span> GAPS:</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    available <span class="op">&amp;=</span> <span class="op">~</span>((time <span class="op">&gt;=</span> start <span class="op">*</span> DAY) <span class="op">&amp;</span> (time <span class="op">&lt;</span> stop <span class="op">*</span> DAY))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>gapped_data <span class="op">=</span> np.where(available, data, np.nan)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> spectrum, noise</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="taper-the-ends-and-gaps" class="level2">
+<h2 class="anchored" data-anchor-id="taper-the-ends-and-gaps">4. Taper the ends and gaps</h2>
+<p>Two-day cosine ramps on the available side of each boundary; apply the same windows to data and templates.</p>
+<div id="6aa03248" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:00.900197Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:00.900106Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:01.306835Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:01.306498Z&quot;}}" data-execution_count="5">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cosine_ramp(distance):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">.5</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> np.cos(np.pi <span class="op">*</span> np.clip(distance <span class="op">/</span> (TAPER_DAYS <span class="op">*</span> DAY), <span class="dv">0</span>, <span class="dv">1</span>)))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>end_window <span class="op">=</span> cosine_ramp(time) <span class="op">*</span> cosine_ramp(time[<span class="op">-</span><span class="dv">1</span>] <span class="op">-</span> time)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>gap_window <span class="op">=</span> end_window.copy()</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, stop <span class="kw">in</span> GAPS:</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Ramp down before the gap and up after it; zero throughout the gap.</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    distance <span class="op">=</span> np.maximum(start <span class="op">*</span> DAY <span class="op">-</span> time, time <span class="op">-</span> stop <span class="op">*</span> DAY)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    gap_window <span class="op">*=</span> cosine_ramp(distance)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> end_window[<span class="dv">0</span>] <span class="op">==</span> end_window[<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.<span class="bu">all</span>(gap_window[<span class="op">~</span>available] <span class="op">==</span> <span class="dv">0</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>row_spacing <span class="op">=</span> T <span class="op">/</span> NT</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>row_time <span class="op">=</span> np.arange(NT) <span class="op">*</span> row_spacing</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>half_cell <span class="op">=</span> row_spacing <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>margin <span class="op">=</span> TAPER_DAYS <span class="op">*</span> DAY <span class="op">+</span> GUARD_ROWS <span class="op">*</span> row_spacing</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>keep_continuous <span class="op">=</span> np.ones(NT, <span class="bu">bool</span>)  <span class="co"># retain every row for the equivalent continuous fit</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>keep_gapped <span class="op">=</span> (row_time <span class="op">-</span> half_cell <span class="op">&gt;</span> margin) <span class="op">&amp;</span> (row_time <span class="op">+</span> half_cell <span class="op">&lt;</span> T <span class="op">-</span> margin)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start, stop <span class="kw">in</span> GAPS:</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    keep_gapped <span class="op">&amp;=</span> <span class="op">~</span>((row_time <span class="op">+</span> half_cell <span class="op">&gt;=</span> start <span class="op">*</span> DAY <span class="op">-</span> margin)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                     <span class="op">&amp;</span> (row_time <span class="op">-</span> half_cell <span class="op">&lt;=</span> stop <span class="op">*</span> DAY <span class="op">+</span> margin))</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, layout<span class="op">=</span><span class="st">"constrained"</span>)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> axis, limits <span class="kw">in</span> <span class="bu">zip</span>(axes, [(<span class="dv">0</span>, <span class="fl">365.25</span>), (<span class="dv">55</span>, <span class="dv">72</span>)]):</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    axis.plot(time[::<span class="dv">32</span>] <span class="op">/</span> DAY, end_window[::<span class="dv">32</span>], color<span class="op">=</span>BLUE, label<span class="op">=</span><span class="st">"Ends"</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    axis.plot(time[::<span class="dv">32</span>] <span class="op">/</span> DAY, gap_window[::<span class="dv">32</span>], color<span class="op">=</span>ORANGE, ls<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"Ends + gaps"</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    axis.<span class="bu">set</span>(xlim<span class="op">=</span>limits, ylim<span class="op">=</span>(<span class="op">-</span><span class="fl">.05</span>, <span class="fl">1.05</span>), xlabel<span class="op">=</span><span class="st">"Time [days]"</span>, ylabel<span class="op">=</span><span class="st">"Window"</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend()</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"WDM rows kept:"</span>, keep_continuous.<span class="bu">sum</span>(), <span class="st">"continuous;"</span>, keep_gapped.<span class="bu">sum</span>(), <span class="st">"gapped"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gb_demo_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WDM rows kept: 64 continuous; 30 gapped</code></pre>
+</div>
+</div>
+</section>
+<section id="signal-with-and-without-gaps" class="level2">
+<h2 class="anchored" data-anchor-id="signal-with-and-without-gaps">5. Signal with and without gaps</h2>
+<div id="644689f7" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:01.308185Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:01.308071Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:01.567445Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:01.567010Z&quot;}}" data-execution_count="6">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">13</span>, <span class="fl">3.5</span>), layout<span class="op">=</span><span class="st">"constrained"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> channel, color, label <span class="kw">in</span> [(<span class="dv">0</span>, BLUE, <span class="st">"A"</span>), (<span class="dv">1</span>, ORANGE, <span class="st">"E"</span>)]:</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    envelope <span class="op">=</span> <span class="bu">abs</span>(hilbert(signal[channel]))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> axis, window <span class="kw">in</span> <span class="bu">zip</span>(axes[:<span class="dv">2</span>], [end_window, gap_window]):</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        axis.plot(time[::<span class="dv">128</span>] <span class="op">/</span> DAY, (envelope <span class="op">*</span> window)[::<span class="dv">128</span>] <span class="op">/</span> <span class="fl">1e-24</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                  color<span class="op">=</span>color, label<span class="op">=</span>label)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    dense_time <span class="op">=</span> <span class="dv">95</span> <span class="op">*</span> DAY <span class="op">+</span> np.arange(<span class="dv">0</span>, <span class="dv">3600</span>, <span class="fl">10.</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    source_frequency <span class="op">=</span> (<span class="bu">int</span>(first) <span class="op">+</span> np.arange(NSLOW)) <span class="op">/</span> T</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    dense <span class="op">=</span> <span class="dv">2</span> <span class="op">/</span> T <span class="op">*</span> np.real(np.asarray(h[channel]) <span class="op">@</span> np.exp(</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        <span class="ot">2j</span> <span class="op">*</span> np.pi <span class="op">*</span> source_frequency[:, <span class="va">None</span>] <span class="op">*</span> dense_time[<span class="va">None</span>, :]))</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">2</span>].plot((dense_time <span class="op">-</span> <span class="dv">95</span> <span class="op">*</span> DAY) <span class="op">/</span> <span class="dv">60</span>, dense <span class="op">/</span> <span class="fl">1e-24</span>, color<span class="op">=</span>color, label<span class="op">=</span>label)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> axis, title <span class="kw">in</span> <span class="bu">zip</span>(axes[:<span class="dv">2</span>], [<span class="st">"No gaps · ends tapered"</span>, <span class="st">"Gaps · cosine tapered"</span>]):</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    axis.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Time [days]"</span>, ylabel<span class="op">=</span><span class="vs">r"Signal envelope / </span><span class="dv">$</span><span class="vs">10</span><span class="dv">^</span><span class="vs">{-24}</span><span class="dv">$</span><span class="vs">"</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>             title<span class="op">=</span>title, xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="fl">365.25</span>), ylim<span class="op">=</span>(<span class="dv">0</span>, <span class="fl">1.05</span> <span class="op">*</span> <span class="bu">abs</span>(hilbert(signal)).<span class="bu">max</span>() <span class="op">/</span> <span class="fl">1e-24</span>))</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Minutes after day 95"</span>, ylabel<span class="op">=</span><span class="vs">r"TDI signal / </span><span class="dv">$</span><span class="vs">10</span><span class="dv">^</span><span class="vs">{-24}</span><span class="dv">$</span><span class="vs">"</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span><span class="st">"Time-domain waveform"</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend()</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gb_demo_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cd8ed43b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:01.568546Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:01.568474Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:01.842838Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:01.842471Z&quot;}}" data-execution_count="7">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>signal_fft <span class="op">=</span> DT <span class="op">*</span> np.fft.rfft(signal, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>end_fft <span class="op">=</span> DT <span class="op">*</span> np.fft.rfft(signal <span class="op">*</span> end_window, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>hard_gap_fft <span class="op">=</span> DT <span class="op">*</span> np.fft.rfft(signal <span class="op">*</span> available <span class="op">*</span> end_window, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>gap_fft <span class="op">=</span> DT <span class="op">*</span> np.fft.rfft(signal <span class="op">*</span> gap_window, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, layout<span class="op">=</span><span class="st">"constrained"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>context <span class="op">=</span> np.geomspace(<span class="fl">1e-4</span>, <span class="fl">.1</span>, <span class="dv">2000</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>context_psd <span class="op">=</span> get_sensitivity(context, sens_fn<span class="op">=</span>A2TDISens, model<span class="op">=</span><span class="st">"scirdv1"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].loglog(context <span class="op">*</span> <span class="fl">1e3</span>, np.sqrt(context <span class="op">*</span> context_psd), color<span class="op">=</span><span class="st">".5"</span>, label<span class="op">=</span><span class="st">"A-channel instrument"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>near <span class="op">=</span> <span class="bu">abs</span>(frequency <span class="op">-</span> F0) <span class="op">&lt;</span> <span class="fl">16e-6</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].loglog(frequency[near] <span class="op">*</span> <span class="fl">1e3</span>, <span class="dv">2</span> <span class="op">*</span> frequency[near] <span class="op">*</span> <span class="bu">abs</span>(end_fft[<span class="dv">0</span>, near]),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>               color<span class="op">=</span>BLUE, label<span class="op">=</span><span class="st">"GB: no gaps, ends tapered"</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].loglog(frequency[near] <span class="op">*</span> <span class="fl">1e3</span>, <span class="dv">2</span> <span class="op">*</span> frequency[near] <span class="op">*</span> <span class="bu">abs</span>(gap_fft[<span class="dv">0</span>, near]),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>               color<span class="op">=</span>ORANGE, ls<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="st">"GB: cosine gaps"</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].axvline(frequency[<span class="op">-</span><span class="dv">1</span>] <span class="op">*</span> <span class="fl">1e3</span>, color<span class="op">=</span><span class="st">".6"</span>, ls<span class="op">=</span><span class="st">":"</span>, label<span class="op">=</span><span class="st">"Simulation Nyquist"</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].<span class="bu">set</span>(xlim<span class="op">=</span>(<span class="fl">.1</span>, <span class="dv">100</span>), xlabel<span class="op">=</span><span class="st">"Frequency [mHz]"</span>, ylabel<span class="op">=</span><span class="st">"TDI characteristic amplitude"</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span><span class="st">"Binary in the LISA band"</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> values, label, color, style <span class="kw">in</span> [(signal_fft, <span class="st">"No gaps, untapered"</span>, OLIVE, <span class="st">"-."</span>),</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                                   (end_fft, <span class="st">"No gaps, ends tapered"</span>, BLUE, <span class="st">"-"</span>),</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                                   (hard_gap_fft, <span class="st">"Hard gaps"</span>, <span class="st">"0.6"</span>, <span class="st">":"</span>),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>                                   (gap_fft, <span class="st">"Cosine gaps"</span>, ORANGE, <span class="st">"--"</span>)]:</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].semilogy((frequency[near] <span class="op">-</span> F0) <span class="op">*</span> <span class="fl">1e6</span>, np.sqrt(<span class="dv">2</span> <span class="op">/</span> T) <span class="op">*</span> <span class="bu">abs</span>(values[<span class="dv">0</span>, near]),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>                     color<span class="op">=</span>color, ls<span class="op">=</span>style, lw<span class="op">=</span><span class="fl">1.1</span>, label<span class="op">=</span>label)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Frequency relative to 3 mHz [µHz]"</span>, ylabel<span class="op">=</span><span class="vs">r"Signal ASD </span><span class="pp">[Hz$^{-1/2}$]</span><span class="vs">"</span>,</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span><span class="st">"Gap leakage: A-channel signal"</span>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> axis <span class="kw">in</span> axes: axis.legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gb_demo_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="wdm-in-a-frequency-band" class="level2">
+<h2 class="anchored" data-anchor-id="wdm-in-a-frequency-band">6. WDM in a frequency band</h2>
+<p>Use <code>wdm_transform.transforms.from_freq_to_wdm_band</code> for the requested channels, including their full Fourier support. A time window still needs an FFT; only the WDM stage is restricted to this band.</p>
+<div id="dda48914" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:01.844332Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:01.844244Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:02.624209Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:02.623773Z&quot;}}" data-execution_count="8">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>WDM_GRID <span class="op">=</span> <span class="bu">dict</span>(nfreqs_fourier<span class="op">=</span><span class="bu">len</span>(frequency), nfreqs_wdm<span class="op">=</span>N <span class="op">//</span> NT, ntimes_wdm<span class="op">=</span>NT)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>grid_frequency <span class="op">=</span> np.arange(N <span class="op">//</span> NT <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> NT <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> T)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>reference_sd <span class="op">=</span> np.sqrt(N <span class="op">*</span> psd[<span class="bu">round</span>(F0 <span class="op">*</span> T)] <span class="op">/</span> (<span class="dv">2</span> <span class="op">*</span> DT))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> transform_band(spectra, kmin, selected_columns):</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Package API accepts one spectrum; vmap applies it to A/E or basis batches.</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> jax.vmap(<span class="kw">lambda</span> spectrum: from_freq_to_wdm_band(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        spectrum, df<span class="op">=</span><span class="dv">1</span> <span class="op">/</span> T, kmin<span class="op">=</span><span class="bu">int</span>(kmin), <span class="op">**</span>WDM_GRID,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        mmin<span class="op">=</span><span class="bu">int</span>(selected_columns[<span class="dv">0</span>]), nf_sub_wdm<span class="op">=</span><span class="bu">len</span>(selected_columns), backend<span class="op">=</span><span class="st">"jax"</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    ))(jnp.asarray(spectra))</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> wdm_band(samples, selected_columns):</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    kmin, length <span class="op">=</span> fourier_span_from_wdm_span(</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>        <span class="op">**</span>WDM_GRID, mmin<span class="op">=</span><span class="bu">int</span>(selected_columns[<span class="dv">0</span>]), nf_sub_wdm<span class="op">=</span><span class="bu">len</span>(selected_columns))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    spectra <span class="op">=</span> np.fft.rfft(samples, axis<span class="op">=-</span><span class="dv">1</span>)[:, kmin:kmin <span class="op">+</span> length]</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.asarray(transform_band(spectra, kmin, selected_columns))</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>plot_columns <span class="op">=</span> np.flatnonzero(<span class="bu">abs</span>(grid_frequency <span class="op">-</span> F0) <span class="op">&lt;</span> <span class="fl">8e-6</span>)</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">11</span>, <span class="dv">4</span>), layout<span class="op">=</span><span class="st">"constrained"</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> axis, window, keep, label <span class="kw">in</span> <span class="bu">zip</span>(axes, [end_window, gap_window],</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>                                    [keep_continuous, keep_gapped], [<span class="st">"No gaps"</span>, <span class="st">"Gapped"</span>]):</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>    coefficients <span class="op">=</span> wdm_band(signal <span class="op">*</span> window, plot_columns)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    power <span class="op">=</span> np.<span class="bu">sum</span>(coefficients<span class="op">**</span><span class="dv">2</span>, axis<span class="op">=</span><span class="dv">0</span>) <span class="op">/</span> reference_sd<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> axis.pcolormesh(row_time <span class="op">/</span> DAY, grid_frequency[plot_columns] <span class="op">*</span> <span class="fl">1e3</span>,</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>                           np.log10(np.maximum(power.T, <span class="fl">1e-8</span>)),</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>                           cmap<span class="op">=</span><span class="st">"magma"</span>, vmin<span class="op">=-</span><span class="dv">5</span>, vmax<span class="op">=</span><span class="fl">1.5</span>, shading<span class="op">=</span><span class="st">"nearest"</span>)</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> center <span class="kw">in</span> row_time[<span class="op">~</span>keep]:</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>        axis.axvspan((center <span class="op">-</span> half_cell) <span class="op">/</span> DAY, (center <span class="op">+</span> half_cell) <span class="op">/</span> DAY,</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>                     color<span class="op">=</span><span class="st">".8"</span>, alpha<span class="op">=</span><span class="fl">.4</span>, linewidth<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    axis.<span class="bu">set</span>(title<span class="op">=</span>label, xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="fl">365.25</span>), xlabel<span class="op">=</span><span class="st">"Time [days]"</span>,</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>             ylabel<span class="op">=</span><span class="st">"Frequency [mHz]"</span>, ylim<span class="op">=</span>(<span class="fl">2.992</span>, <span class="fl">3.008</span>))</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>fig.colorbar(image, ax<span class="op">=</span>axes.tolist(), label<span class="op">=</span><span class="st">"log₁₀ A/E signal power / reference variance"</span>)</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the compact API against the full package transform once.</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>full <span class="op">=</span> WDM.from_time_series(TimeSeries(signal <span class="op">*</span> gap_window, dt<span class="op">=</span>DT), nt<span class="op">=</span>NT, backend<span class="op">=</span><span class="st">"jax"</span>)</span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(wdm_band(signal <span class="op">*</span> gap_window, plot_columns),</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>                           np.asarray(full.coeffs)[:, :, plot_columns], atol<span class="op">=</span><span class="fl">1e-30</span>)</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> full</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Band transform matches the full WDM transform; shaded rows are excluded from the gapped fit."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gb_demo_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Band transform matches the full WDM transform; shaded rows are excluded from the gapped fit.</code></pre>
+</div>
+</div>
+</section>
+<section id="likelihoods" class="level2">
+<h2 class="anchored" data-anchor-id="likelihoods">7. Likelihoods</h2>
+<p>For the continuous comparison, transform the same tapered Fourier band into WDM and carry its full covariance. Precompute the linear template projection for fast calls; no new transform runs inside each likelihood. Gapped WDM keeps guarded rows and checks its diagonal covariance approximation.</p>
+<div id="3afa7860" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:02.625574Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:02.625497Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:02.630313Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:02.629964Z&quot;}}" data-execution_count="9">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> wdm_atoms(columns):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Package inverse of unit coefficients gives the analysis basis / N.</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    atoms <span class="op">=</span> np.empty((NT <span class="op">*</span> <span class="bu">len</span>(columns), N))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> start <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(atoms), <span class="dv">8</span>):</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> np.arange(start, <span class="bu">min</span>(start <span class="op">+</span> <span class="dv">8</span>, <span class="bu">len</span>(atoms)))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        coefficients <span class="op">=</span> np.zeros((<span class="bu">len</span>(index), NT, <span class="bu">len</span>(columns)))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        coefficients[np.arange(<span class="bu">len</span>(index)), index <span class="op">//</span> <span class="bu">len</span>(columns),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                     index <span class="op">%</span> <span class="bu">len</span>(columns)] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        compact <span class="op">=</span> jax.vmap(<span class="kw">lambda</span> c: from_wdm_to_freq_subband(</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>            c, df<span class="op">=</span><span class="dv">1</span> <span class="op">/</span> T, <span class="op">**</span>WDM_GRID, mmin<span class="op">=</span><span class="bu">int</span>(columns[<span class="dv">0</span>]), backend<span class="op">=</span><span class="st">"jax"</span>)[<span class="dv">0</span>]</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        )(jnp.asarray(coefficients))</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        kmin, length <span class="op">=</span> fourier_span_from_wdm_span(</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">**</span>WDM_GRID, mmin<span class="op">=</span><span class="bu">int</span>(columns[<span class="dv">0</span>]), nf_sub_wdm<span class="op">=</span><span class="bu">len</span>(columns))</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        spectrum <span class="op">=</span> np.zeros((<span class="bu">len</span>(index), <span class="bu">len</span>(frequency)), <span class="bu">complex</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        spectrum[:, kmin:kmin <span class="op">+</span> length] <span class="op">=</span> np.asarray(compact)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        atoms[index] <span class="op">=</span> np.fft.irfft(spectrum, n<span class="op">=</span>N, axis<span class="op">=</span><span class="dv">1</span>) <span class="op">*</span> N <span class="op">/</span> reference_sd</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> atoms</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare(atoms, window):</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Apply the identical window to observations, templates, and noise covariance.</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>    atoms <span class="op">=</span> atoms <span class="op">*</span> window</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    observed, injected <span class="op">=</span> data <span class="op">@</span> atoms.T, signal <span class="op">@</span> atoms.T</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    atom_fft <span class="op">=</span> np.fft.rfft(atoms, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> atoms</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    projection <span class="op">=</span> (<span class="dv">2</span> <span class="op">/</span> N <span class="op">/</span> DT) <span class="op">*</span> atom_fft[:, source_bins].conj()</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    atom_fft <span class="op">*=</span> np.sqrt(psd <span class="op">/</span> (N <span class="op">*</span> DT))</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    atom_fft[:, [<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]] <span class="op">/=</span> np.sqrt(<span class="dv">2</span>)</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>    covariance <span class="op">=</span> np.real(atom_fft <span class="op">@</span> atom_fft.conj().T)</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> observed, injected, projection, covariance</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_likelihood(observed, injected, projection, covariance, diagonal<span class="op">=</span><span class="va">False</span>):</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>    variance <span class="op">=</span> covariance.diagonal()</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    correlation <span class="op">=</span> covariance <span class="op">/</span> np.sqrt(variance[:, <span class="va">None</span>] <span class="op">*</span> variance[<span class="va">None</span>, :])</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> diagonal:</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>        discrepancy <span class="op">=</span> np.<span class="bu">max</span>(<span class="bu">abs</span>(eigh(correlation <span class="op">-</span> np.eye(<span class="bu">len</span>(variance)), eigvals_only<span class="op">=</span><span class="va">True</span>)))</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> discrepancy <span class="op">&lt;</span> <span class="fl">.01</span>, <span class="ss">f"Add guard rows: covariance discrepancy = </span><span class="sc">{</span>discrepancy<span class="sc">:.3g}</span><span class="ss">"</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>        white_data <span class="op">=</span> observed <span class="op">/</span> np.sqrt(variance)</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>        white_signal <span class="op">=</span> injected <span class="op">/</span> np.sqrt(variance)</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>        white_projection <span class="op">=</span> projection <span class="op">/</span> np.sqrt(variance[:, <span class="va">None</span>])</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>        rank <span class="op">=</span> <span class="bu">len</span>(variance)</span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>        eigenvalues, vectors <span class="op">=</span> eigh(covariance)</span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>        retained <span class="op">=</span> eigenvalues <span class="op">&gt;</span> eigenvalues[<span class="op">-</span><span class="dv">1</span>] <span class="op">*</span> <span class="fl">1e-10</span></span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>        whitening <span class="op">=</span> (vectors[:, retained] <span class="op">/</span> np.sqrt(eigenvalues[retained])).T</span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>        white_data <span class="op">=</span> observed <span class="op">@</span> whitening.T</span>
+<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>        white_signal <span class="op">=</span> injected <span class="op">@</span> whitening.T</span>
+<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a>        white_projection <span class="op">=</span> whitening <span class="op">@</span> projection</span>
+<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>        rank, discrepancy <span class="op">=</span> <span class="bu">int</span>(retained.<span class="bu">sum</span>()), <span class="va">None</span></span>
+<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a>    projection_jax, observed_jax <span class="op">=</span> jnp.asarray(white_projection), jnp.asarray(white_data)</span>
+<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>    <span class="at">@jax.jit</span></span>
+<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> model(theta):</span>
+<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a>        h, first <span class="op">=</span> binary(theta)</span>
+<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>        index <span class="op">=</span> jnp.arange(NSLOW) <span class="op">+</span> first <span class="op">-</span> source_bins[<span class="dv">0</span>]</span>
+<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> jnp.real(h <span class="op">@</span> projection_jax[:, index].T)</span>
+<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">@jax.jit</span></span>
+<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> likelihood(theta):</span>
+<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="op">-</span><span class="fl">.5</span> <span class="op">*</span> jnp.<span class="bu">sum</span>((observed_jax <span class="op">-</span> model(theta))<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>    np.testing.assert_allclose(model(injection), white_signal, atol<span class="op">=</span><span class="fl">1e-9</span>)</span>
+<span id="cb13-63"><a href="#cb13-63" aria-hidden="true" tabindex="-1"></a>    noise_energy <span class="op">=</span> <span class="bu">float</span>(np.<span class="bu">sum</span>((white_data <span class="op">-</span> white_signal)<span class="op">**</span><span class="dv">2</span>))</span>
+<span id="cb13-64"><a href="#cb13-64" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">abs</span>(noise_energy <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> rank) <span class="op">&lt;</span> <span class="dv">5</span> <span class="op">*</span> np.sqrt(<span class="dv">4</span> <span class="op">*</span> rank)</span>
+<span id="cb13-65"><a href="#cb13-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> likelihood, <span class="bu">dict</span>(snr<span class="op">=</span><span class="bu">float</span>(np.linalg.norm(white_signal)),</span>
+<span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>                            covariance_discrepancy<span class="op">=</span><span class="va">None</span> <span class="cf">if</span> discrepancy <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> <span class="bu">float</span>(discrepancy),</span>
+<span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>                            kept_modes<span class="op">=</span>rank, total_modes<span class="op">=</span><span class="bu">len</span>(variance),</span>
+<span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>                            noise_energy<span class="op">=</span>noise_energy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="9500b361" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:02.631332Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:02.631261Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:06.629878Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:06.629018Z&quot;}}" data-execution_count="10">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>setup_started <span class="op">=</span> perf_counter()</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>likelihoods, checks <span class="op">=</span> {}, {}</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Continuous Fourier: tapered data in a declared band, with exact covariance.</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>fft_bins <span class="op">=</span> np.flatnonzero(<span class="bu">abs</span>(frequency <span class="op">-</span> F0) <span class="op">&lt;</span> <span class="fl">3e-6</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>reference_fft <span class="op">=</span> np.sqrt(T <span class="op">*</span> psd[<span class="bu">round</span>(F0 <span class="op">*</span> T)] <span class="op">/</span> <span class="dv">4</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>phase <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> np.pi <span class="op">*</span> fft_bins[:, <span class="va">None</span>] <span class="op">*</span> np.arange(N)[<span class="va">None</span>, :] <span class="op">/</span> N</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>atoms <span class="op">=</span> np.concatenate([np.cos(phase), <span class="op">-</span>np.sin(phase)]) <span class="op">*</span> DT <span class="op">/</span> reference_fft</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>fft_observed, fft_signal, fft_projection, fft_covariance <span class="op">=</span> prepare(atoms, end_window)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> phase, atoms</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>likelihoods[<span class="st">"Fourier continuous"</span>], checks[<span class="st">"Fourier continuous"</span>] <span class="op">=</span> make_likelihood(</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    fft_observed, fft_signal, fft_projection, fft_covariance)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>direct <span class="op">=</span> DT <span class="op">*</span> np.fft.rfft(data <span class="op">*</span> end_window, axis<span class="op">=</span><span class="dv">1</span>)[:, fft_bins] <span class="op">/</span> reference_fft</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(fft_observed, np.concatenate([direct.real, direct.imag], axis<span class="op">=</span><span class="dv">1</span>), atol<span class="op">=</span><span class="fl">2e-7</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform unit Fourier coordinates in the same band using the package API.</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>mmin, nf_sub <span class="op">=</span> wdm_span_from_fourier_span(</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">**</span>WDM_GRID, kmin<span class="op">=</span><span class="bu">int</span>(fft_bins[<span class="dv">0</span>]), lendata<span class="op">=</span><span class="bu">len</span>(fft_bins))</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>continuous_columns <span class="op">=</span> np.arange(mmin, mmin <span class="op">+</span> nf_sub)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>mode_count <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> <span class="bu">len</span>(fft_bins)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>rotation <span class="op">=</span> np.empty((NT <span class="op">*</span> <span class="bu">len</span>(continuous_columns), mode_count))</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> start <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, mode_count, <span class="dv">8</span>):</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> np.arange(start, <span class="bu">min</span>(start <span class="op">+</span> <span class="dv">8</span>, mode_count))</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    unit_spectrum <span class="op">=</span> np.zeros((<span class="bu">len</span>(index), <span class="bu">len</span>(fft_bins)), <span class="bu">complex</span>)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>    unit_spectrum[np.arange(<span class="bu">len</span>(index)), index <span class="op">%</span> <span class="bu">len</span>(fft_bins)] <span class="op">=</span> (</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>        np.where(index <span class="op">&lt;</span> <span class="bu">len</span>(fft_bins), <span class="fl">1.</span>, <span class="ot">1j</span>) <span class="op">*</span> reference_fft <span class="op">/</span> DT)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    coefficients <span class="op">=</span> np.asarray(transform_band(unit_spectrum, fft_bins[<span class="dv">0</span>], continuous_columns))</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>    rotation[:, index] <span class="op">=</span> coefficients.reshape(<span class="bu">len</span>(index), <span class="op">-</span><span class="dv">1</span>).T <span class="op">/</span> reference_sd</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Losing any Fourier mode here would invalidate posterior equivalence.</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(rotation.T <span class="op">@</span> rotation, np.eye(mode_count), atol<span class="op">=</span><span class="fl">1e-10</span>)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>wdm_observed <span class="op">=</span> fft_observed <span class="op">@</span> rotation.T</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>likelihoods[<span class="st">"WDM continuous"</span>], checks[<span class="st">"WDM continuous"</span>] <span class="op">=</span> make_likelihood(</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>    wdm_observed, fft_signal <span class="op">@</span> rotation.T,</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>    rotation <span class="op">@</span> fft_projection, rotation <span class="op">@</span> fft_covariance <span class="op">@</span> rotation.T)</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> checks[<span class="st">"WDM continuous"</span>][<span class="st">"kept_modes"</span>] <span class="op">==</span> checks[<span class="st">"Fourier continuous"</span>][<span class="st">"kept_modes"</span>]</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct package transform of the band-limited observation.</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>band_spectrum <span class="op">=</span> (fft_observed[:, :<span class="bu">len</span>(fft_bins)] <span class="op">+</span></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>                 <span class="ot">1j</span> <span class="op">*</span> fft_observed[:, <span class="bu">len</span>(fft_bins):]) <span class="op">*</span> reference_fft <span class="op">/</span> DT</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>direct <span class="op">=</span> np.asarray(transform_band(band_spectrum, fft_bins[<span class="dv">0</span>], continuous_columns))</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(wdm_observed, direct.reshape(<span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>) <span class="op">/</span> reference_sd, atol<span class="op">=</span><span class="fl">1e-8</span>)</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Gapped WDM: raw time gaps + cosine tapers + guarded row selection.</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>atoms <span class="op">=</span> wdm_atoms(columns)[np.repeat(keep_gapped, <span class="bu">len</span>(columns))]</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>gap_observed, gap_signal, gap_projection, gap_covariance <span class="op">=</span> prepare(atoms, gap_window)</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>likelihoods[<span class="st">"WDM gapped"</span>], checks[<span class="st">"WDM gapped"</span>] <span class="op">=</span> make_likelihood(</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>    gap_observed, gap_signal, gap_projection, gap_covariance, diagonal<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>direct <span class="op">=</span> wdm_band(data <span class="op">*</span> gap_window, columns)[:, keep_gapped].reshape(<span class="dv">2</span>, <span class="op">-</span><span class="dv">1</span>) <span class="op">/</span> reference_sd</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>np.testing.assert_allclose(gap_observed, direct, atol<span class="op">=</span><span class="fl">1e-8</span>)</span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> atoms, unit_spectrum, coefficients, band_spectrum, direct</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify likelihood SHAPE across the prior before running any sampler.</span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>rng_check <span class="op">=</span> np.random.default_rng(<span class="dv">42</span>)</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>points <span class="op">=</span> np.column_stack([rng_check.uniform(<span class="op">-</span><span class="fl">.95</span>, <span class="fl">.95</span>, <span class="dv">30</span>),</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>                          rng_check.uniform(<span class="op">-</span><span class="fl">2.9</span>, <span class="fl">2.9</span>, <span class="dv">30</span>),</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>                          rng_check.uniform(<span class="fl">.31</span>, <span class="fl">1.99</span>, <span class="dv">30</span>)])</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>fft_ll, wdm_ll <span class="op">=</span> likelihoods[<span class="st">"Fourier continuous"</span>], likelihoods[<span class="st">"WDM continuous"</span>]</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>parity_error <span class="op">=</span> <span class="bu">max</span>(<span class="bu">abs</span>(<span class="bu">float</span>(fft_ll(p) <span class="op">-</span> fft_ll(injection)) <span class="op">-</span></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>                       <span class="bu">float</span>(wdm_ll(p) <span class="op">-</span> wdm_ll(injection))) <span class="cf">for</span> p <span class="kw">in</span> points)</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> parity_error <span class="op">&lt;</span> <span class="fl">1e-7</span></span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Continuous likelihood parity: max |delta log L difference| = </span><span class="sc">{</span>parity_error<span class="sc">:.2g}</span><span class="ss">"</span>)</span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, result <span class="kw">in</span> checks.items():</span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>    weighting <span class="op">=</span> (<span class="st">"full covariance"</span> <span class="cf">if</span> result[<span class="st">"covariance_discrepancy"</span>] <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span></span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>                 <span class="ss">f"diagonal approximation error </span><span class="sc">{</span><span class="dv">100</span> <span class="op">*</span> result[<span class="st">'covariance_discrepancy'</span>]<span class="sc">:.3f}</span><span class="ss">%"</span>)</span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">: SNR </span><span class="sc">{</span>result[<span class="st">'snr'</span>]<span class="sc">:.2f}</span><span class="ss">; modes </span><span class="sc">{</span>result[<span class="st">'kept_modes'</span>]<span class="sc">}</span><span class="ss">; </span><span class="sc">{</span>weighting<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>setup_seconds <span class="op">=</span> perf_counter() <span class="op">-</span> setup_started</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Continuous likelihood parity: max |delta log L difference| = 6.8e-13
+Fourier continuous: SNR 24.97; modes 378; full covariance
+WDM continuous: SNR 24.97; modes 378; full covariance
+WDM gapped: SNR 16.47; modes 150; diagonal approximation error 0.411%</code></pre>
+</div>
+</div>
+</section>
+<section id="likelihood-runtime" class="level2">
+<h2 class="anchored" data-anchor-id="likelihood-runtime">8. Likelihood runtime</h2>
+<p>Median and interquartile range over seven repeats, after JIT warm-up and with JAX synchronization. Calls include JaXGB templates and the precomputed projection; setup is separate. The 24-point batch matches the ensemble size; emcee also uses 12-point half-ensembles.</p>
+<div id="f842fead" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:06.631861Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:06.631762Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:20.825160Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:20.824782Z&quot;}}" data-execution_count="11">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> benchmark_likelihood(log_likelihood, batch_size<span class="op">=</span><span class="dv">1</span>, repeats<span class="op">=</span><span class="dv">7</span>, calls<span class="op">=</span><span class="dv">128</span>):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    evaluate <span class="op">=</span> log_likelihood <span class="cf">if</span> batch_size <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> jax.jit(jax.vmap(log_likelihood))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(<span class="dv">123</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    points <span class="op">=</span> injection <span class="op">+</span> rng.normal(size<span class="op">=</span>(calls, batch_size, <span class="dv">3</span>)) <span class="op">*</span> [<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.02</span>]</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    arguments <span class="op">=</span> jnp.asarray(points[:, <span class="dv">0</span>] <span class="cf">if</span> batch_size <span class="op">==</span> <span class="dv">1</span> <span class="cf">else</span> points)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    inputs <span class="op">=</span> [arguments[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(calls)]  <span class="co"># transfer/indexing outside the timer</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> inputs[:<span class="dv">3</span>]:</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        evaluate(x).block_until_ready()</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    timings <span class="op">=</span> []</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(repeats):</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>        started <span class="op">=</span> perf_counter()</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> x <span class="kw">in</span> inputs:</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>            evaluate(x).block_until_ready()</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        timings.append((perf_counter() <span class="op">-</span> started) <span class="op">*</span> <span class="fl">1e3</span> <span class="op">/</span> calls)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.quantile(timings, [<span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.75</span>])</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>likelihood_timings <span class="op">=</span> {}</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> [<span class="st">"| Fit | Single call [ms], median (IQR) | 24-point batch [ms], median (IQR) |"</span>,</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"|:--|--:|--:|"</span>]</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, likelihood <span class="kw">in</span> likelihoods.items():</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    single <span class="op">=</span> benchmark_likelihood(likelihood)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    batch <span class="op">=</span> benchmark_likelihood(likelihood, batch_size<span class="op">=</span><span class="dv">24</span>)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    likelihood_timings[name] <span class="op">=</span> <span class="bu">dict</span>(single_ms<span class="op">=</span>single.tolist(), batch_ms<span class="op">=</span>batch.tolist())</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    rows.append(<span class="ss">f"| </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> | </span><span class="sc">{</span>single[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss"> (</span><span class="sc">{</span>single[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">–</span><span class="sc">{</span>single[<span class="dv">2</span>]<span class="sc">:.3f}</span><span class="ss">) | "</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"</span><span class="sc">{</span>batch[<span class="dv">1</span>]<span class="sc">:.3f}</span><span class="ss"> (</span><span class="sc">{</span>batch[<span class="dv">0</span>]<span class="sc">:.3f}</span><span class="ss">–</span><span class="sc">{</span>batch[<span class="dv">2</span>]<span class="sc">:.3f}</span><span class="ss">) |"</span>)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>display(Markdown(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(rows)))</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Likelihood setup (basis, projections, covariance, parity checks): </span><span class="sc">{</span>setup_seconds<span class="sc">:.1f}</span><span class="ss"> s"</span>)</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Timing host:"</span>, platform.platform(), <span class="st">"|"</span>, platform.machine(), <span class="st">"|"</span>, jax.devices())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Fit</th>
+<th style="text-align: right;">Single call [ms], median (IQR)</th>
+<th style="text-align: right;">24-point batch [ms], median (IQR)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fourier continuous</td>
+<td style="text-align: right;">0.351 (0.345–0.388)</td>
+<td style="text-align: right;">5.424 (5.320–5.532)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">WDM continuous</td>
+<td style="text-align: right;">0.320 (0.318–0.322)</td>
+<td style="text-align: right;">5.241 (5.099–5.514)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WDM gapped</td>
+<td style="text-align: right;">0.234 (0.231–0.246)</td>
+<td style="text-align: right;">2.811 (2.693–2.904)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Likelihood setup (basis, projections, covariance, parity checks): 4.0 s
+Timing host: macOS-26.5.1-arm64-arm-64bit | arm64 | [CpuDevice(id=0)]</code></pre>
+</div>
+</div>
+</section>
+<section id="fit-f_0-dot-f-a" class="level2">
+<h2 class="anchored" data-anchor-id="fit-f_0-dot-f-a">9. Fit <span class="math inline">\(f_0\)</span>, <span class="math inline">\(\dot f\)</span>, <span class="math inline">\(A\)</span></h2>
+<p>Uniform priors: <span class="math inline">\(T\Delta f_0\in[-1,1]\)</span>, <span class="math inline">\(T^2\Delta\dot f\in[-3,3]\)</span>, <span class="math inline">\(A/A_0\in[0.3,2]\)</span>. Two independent emcee ensembles per fit.</p>
+<div id="d0ff0782" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:20.826516Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:20.826371Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:53:20.831324Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:53:20.830915Z&quot;}}" data-execution_count="12">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample(log_likelihood, seed):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    total_started <span class="op">=</span> perf_counter()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">@jax.jit</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> log_posterior(theta):</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        inside <span class="op">=</span> ((jnp.<span class="bu">abs</span>(theta[<span class="dv">0</span>]) <span class="op">&lt;</span> <span class="dv">1</span>) <span class="op">&amp;</span> (jnp.<span class="bu">abs</span>(theta[<span class="dv">1</span>]) <span class="op">&lt;</span> <span class="dv">3</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                  <span class="op">&amp;</span> (theta[<span class="dv">2</span>] <span class="op">&gt;</span> <span class="fl">0.3</span>) <span class="op">&amp;</span> (theta[<span class="dv">2</span>] <span class="op">&lt;</span> <span class="dv">2</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> jnp.where(inside, log_likelihood(theta), <span class="op">-</span>jnp.inf)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    batch <span class="op">=</span> jax.jit(jax.vmap(log_posterior))</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    setup_started <span class="op">=</span> perf_counter()</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    log_posterior(jnp.asarray(injection)).block_until_ready()</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> size <span class="kw">in</span> [<span class="dv">12</span>, <span class="dv">24</span>]:</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        batch(jnp.tile(jnp.asarray(injection), (size, <span class="dv">1</span>))).block_until_ready()</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    fit <span class="op">=</span> minimize(<span class="kw">lambda</span> x: <span class="op">-</span><span class="bu">float</span>(log_posterior(x)), [<span class="fl">0.03</span>, <span class="op">-</span><span class="fl">0.15</span>, <span class="dv">1</span>],</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>                   method<span class="op">=</span><span class="st">"Nelder-Mead"</span>, options<span class="op">=</span>{<span class="st">"xatol"</span>: <span class="fl">1e-7</span>, <span class="st">"maxiter"</span>: <span class="dv">1500</span>})</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> fit.success</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    setup_time <span class="op">=</span> perf_counter() <span class="op">-</span> setup_started</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    chains, diagnostics <span class="op">=</span> [], []</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> run <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>        evaluations <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>        <span class="kw">def</span> evaluate_batch(x):</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>            <span class="kw">nonlocal</span> evaluations</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>            evaluations <span class="op">+=</span> <span class="bu">len</span>(x)</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> np.asarray(batch(x))  <span class="co"># synchronizes JAX before emcee proceeds</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>        sampler <span class="op">=</span> emcee.EnsembleSampler(<span class="dv">24</span>, <span class="dv">3</span>, evaluate_batch, vectorize<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>        sampler.random_state <span class="op">=</span> np.random.RandomState(seed <span class="op">+</span> run).get_state()</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>        start <span class="op">=</span> fit.x <span class="op">+</span> rng.normal(size<span class="op">=</span>(<span class="dv">24</span>, <span class="dv">3</span>)) <span class="op">*</span> [<span class="fl">0.04</span>, <span class="fl">0.12</span>, <span class="fl">0.04</span>]</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>        burn_started <span class="op">=</span> perf_counter()</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>        state <span class="op">=</span> sampler.run_mcmc(start, <span class="dv">700</span>)</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        burn_seconds <span class="op">=</span> perf_counter() <span class="op">-</span> burn_started</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>        sampler.reset()</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>        production_started <span class="op">=</span> perf_counter()</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>        sampler.run_mcmc(state, <span class="dv">3500</span>)</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> sampler.iteration <span class="op">&lt;</span> <span class="dv">7500</span>:</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>            tau <span class="op">=</span> sampler.get_autocorr_time(tol<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> sampler.iteration <span class="op">&gt;</span> <span class="dv">70</span> <span class="op">*</span> tau.<span class="bu">max</span>():</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>                <span class="cf">break</span></span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>            sampler.run_mcmc(<span class="va">None</span>, <span class="dv">1000</span>)</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>        production_seconds <span class="op">=</span> perf_counter() <span class="op">-</span> production_started</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>        chain <span class="op">=</span> sampler.get_chain()</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>        tau <span class="op">=</span> sampler.get_autocorr_time(tol<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> sampler.iteration <span class="op">&gt;</span> <span class="dv">50</span> <span class="op">*</span> tau.<span class="bu">max</span>()</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>        chains.append(chain)</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>        diagnostics.append(<span class="bu">dict</span>(steps<span class="op">=</span>sampler.iteration, tau<span class="op">=</span>tau.tolist(),</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>                                burn_seconds<span class="op">=</span>burn_seconds, production_seconds<span class="op">=</span>production_seconds,</span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>                                posterior_evaluations<span class="op">=</span>evaluations,</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>                                acceptance<span class="op">=</span><span class="bu">float</span>(sampler.acceptance_fraction.mean())))</span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>    samples <span class="op">=</span> np.concatenate([c.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">3</span>) <span class="cf">for</span> c <span class="kw">in</span> chains])</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>    difference <span class="op">=</span> np.<span class="bu">abs</span>(chains[<span class="dv">0</span>].mean((<span class="dv">0</span>, <span class="dv">1</span>)) <span class="op">-</span> chains[<span class="dv">1</span>].mean((<span class="dv">0</span>, <span class="dv">1</span>))) <span class="op">/</span> samples.std(<span class="dv">0</span>)</span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> np.<span class="bu">max</span>(difference) <span class="op">&lt;</span> <span class="fl">0.15</span></span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> samples, chains, <span class="bu">dict</span>(<span class="bu">map</span><span class="op">=</span>fit.x.tolist(), ensembles<span class="op">=</span>diagnostics,</span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a>                                 setup_seconds<span class="op">=</span>setup_time, wall_seconds<span class="op">=</span>perf_counter() <span class="op">-</span> total_started,</span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>                                 ensemble_mean_difference_over_sd<span class="op">=</span>difference.tolist(),</span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>                                 quantiles<span class="op">=</span>np.quantile(samples, [<span class="fl">0.05</span>, <span class="fl">0.5</span>, <span class="fl">0.95</span>], axis<span class="op">=</span><span class="dv">0</span>).tolist(),</span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>                                 sd<span class="op">=</span>samples.std(<span class="dv">0</span>).tolist())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="b957c160" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:53:20.832642Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:53:20.832577Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:55:36.705462Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:55:36.704992Z&quot;}}" data-execution_count="13">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>samples, diagnostics <span class="op">=</span> {}, {}</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (name, likelihood) <span class="kw">in</span> <span class="bu">enumerate</span>(likelihoods.items()):</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Fitting"</span>, name, flush<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    samples[name], chains, diagnostics[name] <span class="op">=</span> sample(likelihood, SEED <span class="op">+</span> <span class="dv">100</span> <span class="op">*</span> i)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">del</span> chains</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"  done; max independent-ensemble mean difference / SD:"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>          <span class="bu">round</span>(<span class="bu">max</span>(diagnostics[name][<span class="st">"ensemble_mean_difference_over_sd"</span>]), <span class="dv">3</span>), flush<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fitting Fourier continuous
+  done; max independent-ensemble mean difference / SD: 0.015
+Fitting WDM continuous
+  done; max independent-ensemble mean difference / SD: 0.021
+Fitting WDM gapped
+  done; max independent-ensemble mean difference / SD: 0.054</code></pre>
+</div>
+</div>
+</section>
+<section id="posteriors-and-checks" class="level2">
+<h2 class="anchored" data-anchor-id="posteriors-and-checks">10. Posteriors and checks</h2>
+<div id="564e7ae0" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:55:36.706899Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:55:36.706803Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:55:36.864985Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:55:36.864576Z&quot;}}" data-execution_count="14">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, layout<span class="op">=</span><span class="st">"constrained"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (name, values), color, style <span class="kw">in</span> <span class="bu">zip</span>(samples.items(), [BLUE, ORANGE, OLIVE], [<span class="st">"-"</span>, <span class="st">"--"</span>, <span class="st">":"</span>]):</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    physical <span class="op">=</span> np.column_stack([values[:, <span class="dv">0</span>] <span class="op">/</span> T <span class="op">*</span> <span class="fl">1e9</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                               (FDOT <span class="op">+</span> values[:, <span class="dv">1</span>] <span class="op">/</span> T<span class="op">**</span><span class="dv">2</span>) <span class="op">*</span> <span class="fl">1e15</span>, values[:, <span class="dv">2</span>]])</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, axis <span class="kw">in</span> <span class="bu">enumerate</span>(axes):</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        axis.hist(physical[:, i], bins<span class="op">=</span><span class="dv">55</span>, density<span class="op">=</span><span class="va">True</span>, histtype<span class="op">=</span><span class="st">"step"</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                  color<span class="op">=</span>color, ls<span class="op">=</span>style, lw<span class="op">=</span><span class="fl">1.6</span>, label<span class="op">=</span>name)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    lo, median, hi <span class="op">=</span> np.quantile(values, [<span class="fl">.05</span>, <span class="fl">.5</span>, <span class="fl">.95</span>], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="st">"| injection in 90</span><span class="sc">% i</span><span class="st">ntervals:"</span>, (lo <span class="op">&lt;</span> injection) <span class="op">&amp;</span> (injection <span class="op">&lt;</span> hi))</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> axis, truth, label <span class="kw">in</span> <span class="bu">zip</span>(axes, [<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>],</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    [<span class="vs">r"</span><span class="dv">$</span><span class="vs">f_0-f_{0,</span><span class="dv">\m</span><span class="vs">athrm{inj}}</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[nHz]</span><span class="vs">"</span>, <span class="vs">r"</span><span class="dv">$\d</span><span class="vs">ot f</span><span class="dv">$</span><span class="vs"> </span><span class="pp">[$10^{-15}$ Hz/s]</span><span class="vs">"</span>, <span class="vs">r"</span><span class="dv">$</span><span class="vs">A/A_0</span><span class="dv">$</span><span class="vs">"</span>]):</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    axis.axvline(truth, color<span class="op">=</span><span class="st">".4"</span>, lw<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    axis.<span class="bu">set</span>(xlabel<span class="op">=</span>label, ylabel<span class="op">=</span><span class="st">"Posterior density"</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(fontsize<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, result <span class="kw">in</span> diagnostics.items():</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    ratios <span class="op">=</span> [run[<span class="st">"steps"</span>] <span class="op">/</span> <span class="bu">max</span>(run[<span class="st">"tau"</span>]) <span class="cf">for</span> run <span class="kw">in</span> result[<span class="st">"ensembles"</span>]]</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">min</span>(ratios) <span class="op">&gt;</span> <span class="dv">50</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(name, <span class="st">"| production / autocorrelation time:"</span>, np.<span class="bu">round</span>(ratios, <span class="dv">1</span>))</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gapped / continuous WDM posterior SD:"</span>,</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>      np.<span class="bu">round</span>(samples[<span class="st">"WDM gapped"</span>].std(<span class="dv">0</span>) <span class="op">/</span> samples[<span class="st">"WDM continuous"</span>].std(<span class="dv">0</span>), <span class="dv">2</span>))</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Packages:"</span>, {name: version(name) <span class="cf">for</span> name <span class="kw">in</span> packages})</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>mean_difference <span class="op">=</span> <span class="bu">abs</span>(samples[<span class="st">"Fourier continuous"</span>].mean(<span class="dv">0</span>) <span class="op">-</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>                      samples[<span class="st">"WDM continuous"</span>].mean(<span class="dv">0</span>)) <span class="op">/</span> samples[<span class="st">"Fourier continuous"</span>].std(<span class="dv">0</span>)</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>width_ratio <span class="op">=</span> samples[<span class="st">"WDM continuous"</span>].std(<span class="dv">0</span>) <span class="op">/</span> samples[<span class="st">"Fourier continuous"</span>].std(<span class="dv">0</span>)</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">max</span>(mean_difference) <span class="op">&lt;</span> <span class="fl">.1</span> <span class="kw">and</span> <span class="bu">max</span>(<span class="bu">abs</span>(width_ratio <span class="op">-</span> <span class="dv">1</span>)) <span class="op">&lt;</span> <span class="fl">.03</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Continuous mean difference / SD:"</span>, np.<span class="bu">round</span>(mean_difference, <span class="dv">3</span>))</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Continuous WDM / Fourier posterior SD:"</span>, np.<span class="bu">round</span>(width_ratio, <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fourier continuous | injection in 90% intervals: [ True  True  True]
+WDM continuous | injection in 90% intervals: [ True  True  True]
+WDM gapped | injection in 90% intervals: [ True  True  True]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gb_demo_files/figure-html/cell-15-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fourier continuous | production / autocorrelation time: [83.7 97.8]
+WDM continuous | production / autocorrelation time: [90.7 92.8]
+WDM gapped | production / autocorrelation time: [89.9 97.3]
+Gapped / continuous WDM posterior SD: [1.53 1.5  1.5 ]
+Packages: {'jaxgb': '0.2.1', 'lisaorbits': '3.1.0', 'lisaanalysistools': '1.2.8', 'wdm-transform': '0.5.0', 'emcee': '3.1.6', 'jax': '0.11.2', 'numpy': '2.5.3', 'scipy': '1.18.1', 'gpubackendtools': '0.1.1', 'astropy': '7.2.0'}
+Continuous mean difference / SD: [0.045 0.04  0.033]
+Continuous WDM / Fourier posterior SD: [0.998 0.997 0.996]</code></pre>
+</div>
+</div>
+</section>
+<section id="mcmc-runtime" class="level2">
+<h2 class="anchored" data-anchor-id="mcmc-runtime">11. MCMC runtime</h2>
+<p>Measured on this runtime: two ensembles × 24 walkers, 700 burn-in steps each. Production stops using autocorrelation checks, so compare the steps as well as the time. Total includes posterior JIT warm-up, optimization, sampling, and diagnostics.</p>
+<div id="7e187af2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-05T09:55:36.866122Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-05T09:55:36.866049Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-05T09:55:36.906281Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-05T09:55:36.905879Z&quot;}}" data-execution_count="15">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> [<span class="st">"| Fit | Setup + MAP [s] | Burn-in [s] | Production [s] | Production steps per ensemble | Posterior evaluations | Total [s] |"</span>,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>        <span class="st">"|:--|--:|--:|--:|:--|--:|--:|"</span>]</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, result <span class="kw">in</span> diagnostics.items():</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    runs <span class="op">=</span> result[<span class="st">"ensembles"</span>]</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    steps <span class="op">=</span> <span class="st">", "</span>.join(<span class="bu">str</span>(run[<span class="st">"steps"</span>]) <span class="cf">for</span> run <span class="kw">in</span> runs)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    rows.append(<span class="ss">f"| </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> | </span><span class="sc">{</span>result[<span class="st">'setup_seconds'</span>]<span class="sc">:.2f}</span><span class="ss"> | "</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"</span><span class="sc">{</span><span class="bu">sum</span>(run[<span class="st">'burn_seconds'</span>] <span class="cf">for</span> run <span class="kw">in</span> runs)<span class="sc">:.2f}</span><span class="ss"> | "</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"</span><span class="sc">{</span><span class="bu">sum</span>(run[<span class="st">'production_seconds'</span>] <span class="cf">for</span> run <span class="kw">in</span> runs)<span class="sc">:.2f}</span><span class="ss"> | </span><span class="sc">{</span>steps<span class="sc">}</span><span class="ss"> | "</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f"</span><span class="sc">{</span><span class="bu">sum</span>(run[<span class="st">'posterior_evaluations'</span>] <span class="cf">for</span> run <span class="kw">in</span> runs)<span class="sc">:,}</span><span class="ss"> | </span><span class="sc">{</span>result[<span class="st">'wall_seconds'</span>]<span class="sc">:.2f}</span><span class="ss"> |"</span>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>display(Markdown(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>.join(rows)))</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>fig, axis <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">3.5</span>), layout<span class="op">=</span><span class="st">"constrained"</span>)</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> <span class="bu">list</span>(diagnostics)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> [diagnostics[name][<span class="st">"wall_seconds"</span>] <span class="cf">for</span> name <span class="kw">in</span> names]</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>axis.barh(names, values, color<span class="op">=</span>[BLUE, ORANGE, OLIVE])</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>axis.bar_label(axis.containers[<span class="dv">0</span>], fmt<span class="op">=</span><span class="st">"</span><span class="sc">%.1f</span><span class="st"> s"</span>, padding<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>axis.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Wall time [s]"</span>, title<span class="op">=</span><span class="st">"Final MCMC fits · two ensembles per fit"</span>,</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>         xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="fl">1.2</span> <span class="op">*</span> <span class="bu">max</span>(values)))</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>axis.invert_yaxis()</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Fit</th>
+<th style="text-align: right;">Setup + MAP [s]</th>
+<th style="text-align: right;">Burn-in [s]</th>
+<th style="text-align: right;">Production [s]</th>
+<th style="text-align: left;">Production steps per ensemble</th>
+<th style="text-align: right;">Posterior evaluations</th>
+<th style="text-align: right;">Total [s]</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fourier continuous</td>
+<td style="text-align: right;">0.52</td>
+<td style="text-align: right;">9.12</td>
+<td style="text-align: right;">42.03</td>
+<td style="text-align: left;">3500, 3500</td>
+<td style="text-align: right;">201,648</td>
+<td style="text-align: right;">51.69</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">WDM continuous</td>
+<td style="text-align: right;">0.47</td>
+<td style="text-align: right;">8.59</td>
+<td style="text-align: right;">43.71</td>
+<td style="text-align: left;">3500, 3500</td>
+<td style="text-align: right;">201,648</td>
+<td style="text-align: right;">52.80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WDM gapped</td>
+<td style="text-align: right;">0.46</td>
+<td style="text-align: right;">4.96</td>
+<td style="text-align: right;">25.91</td>
+<td style="text-align: left;">3500, 3500</td>
+<td style="text-align: right;">201,648</td>
+<td style="text-align: right;">31.35</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="gb_demo_files/figure-html/cell-16-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One simulated realization and local sampling checks. Runtimes depend on the host; the gapped fit uses fewer modes. The broad instrument curve extends beyond the simulation Nyquist.</p>
+<p><a href="https://pypi.org/project/jaxgb/0.2.1/">JaXGB</a> · <a href="https://github.com/pywavelet/wdm_transform/blob/main/src/wdm_transform/transforms/__init__.py">WDM band API</a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button,
+          { trigger: "manual",
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config);
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined;
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              }
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            }
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/avivajpeyi/lisa_gb_wdm_analysis_demo/issues/new" class="toc-action"><i class="bi bi-github"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
